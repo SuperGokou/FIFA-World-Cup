@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FIFA World Cup</title>
+
+    <!-- CSS LIBRARIES -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.4.0/nouislider.css" integrity="sha512-DGB74Gyw93qON+V0QxSRs1er6sqoPyFoy23HBL5LN7MRJBcjeCU22zega+vOEGE0XQLoVrv4ExcaesSTwZQA2w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- YOUR CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link href="noUiSlider-15.7.1/dist/nouislider.css" rel="stylesheet">
+
+</head>
+<body style="padding: 10vh 10vw 10vw 5vh">
+
+<div class="container" style="background: #d5dcd5; border: black medium solid; border-radius: 10px; width: 120vh;height: 55vh">
+
+    <h1>FIFA World Cup<sup>TM</sup></h1>
+    <h2>All Time Statistics</h2>
+
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col" style="padding-left: 30px">
+                    <select id="y-axis-select">
+                        <option value="GOALS">Goals</option>
+                        <option value="AVERAGE_GOALS">Average Goals</option>
+                        <option value="MATCHES">Matches</option>
+                        <option value="TEAMS">Teams</option>
+                        <option value="AVERAGE_ATTENDANCE">Average Attendance</option>
+                    </select>
+                </div>
+                <div class="col" style="padding-right: 2vw; padding-left: 2vw">
+
+                    <div id="slider-container" style="position: relative;width: 15vh;height: 3vh">
+                        <div id="slider"></div>
+                        <div id="slider-label-left" style="position: absolute; left: -60px; top: -0.3vh; background: #efe9e9"><label>1930</label></div> <!-- Positioned below the slider on the left -->
+                        <div id="slider-label-right" style="position: absolute; right: -60px; top: -0.3vh;background: #efe9e9"><label>2014</label></div> <!-- Positioned below the slider on the right -->
+                    </div>
+
+<!--                    <div id="slider"></div>-->
+
+                </div>
+                <!-- Parent container for the visualization -->
+                <div id="chart-area"></div>
+            </div>
+
+        </div>
+
+        <div class="col" style="padding-left: 250px; padding-right: 20px">
+            <div id="details-container" style="border: thin black solid; background: white; padding-right: 15px; padding-top: 2vh; width: 400px; height: 380px">
+                <h2 style="padding-left: 15px"><span id="detail-title"> <-Year-> World Cup <-Location-></span></h2>
+
+                <table class="table table-striped">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row" style="padding-left: 30px">Winner</th>
+                        <td><span id="detail-winner"></span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding-left: 30px">Goals</th>
+                        <td><span id="detail-goals"></span></td>
+
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding-left: 30px">Average Goals</th>
+                        <td><span id="detail-average-goals"></span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding-left: 30px">Matches</th>
+                        <td><span id="detail-matches"></span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding-left: 30px">Teams</th>
+                        <td><span id="detail-teams"></span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding-left: 30px">Average Attendance</th>
+                        <td><span id="detail-average-attendance"></span></td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+<!-- embedding JS libraries -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.4.0/nouislider.min.js"
+        integrity="sha512-mZXUH8DAODwCHioWP3gltQwa953LbABMlzTYwYkKqv8eNxOk37B1HgNNuCMfFxgrpW5C34WJbxPDcM58+s1dJA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- d3 -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<!-- Your implementation -->
+<script src="js/main.js"></script>
+<script src="noUiSlider-15.7.1/dist/nouislider.js"></script>
+
+</body>
+</html>
