@@ -212,10 +212,11 @@ d3.select("#y-axis-select").on("change", function() {
 // Show details for a specific FIFA World Cup
 function showEdition(d){
 
-	const editionTitle = `${d.YEAR)} World Cup ${d.LOCATION}`;
+
 	
 
-	document.getElementById("detail-title").textContent = editionTitle;
+	document.getElementById("detail-title").textContent = d.YEAR.getFullYear() + " World Cup " + d.LOCATION;;
+	
 	document.getElementById("detail-winner").textContent = d.WINNER;
 	document.getElementById("detail-goals").textContent = d.GOALS;
 	document.getElementById("detail-average-goals").textContent = d.AVERAGE_GOALS;
