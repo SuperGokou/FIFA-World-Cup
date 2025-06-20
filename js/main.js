@@ -212,7 +212,7 @@ d3.select("#y-axis-select").on("change", function() {
 // Show details for a specific FIFA World Cup
 function showEdition(d){
 
-	const editionTitle = `${d.YEAR.getFullYear()} World Cup ${d.LOCATION}`;
+	const editionTitle = `${d.YEAR)} World Cup ${d.LOCATION}`;
 	
 
 	document.getElementById("detail-title").textContent = editionTitle;
