@@ -215,7 +215,6 @@ function showEdition(d){
 
 	const editionTitle = `${d.YEAR.getFullYear()} World Cup ${d.LOCATION}`;
 	
-	document.getElementById("detail-title").textContent = d.YEAR.getFullYear() + " World Cup " + d.LOCATION;
 
 	document.getElementById("detail-title").textContent = editionTitle;
 	document.getElementById("detail-winner").textContent = d.WINNER;
