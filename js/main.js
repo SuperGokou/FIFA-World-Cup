@@ -200,8 +200,6 @@ function updateVisualization(filteredData) {
 		.attr("cy", 0) // transition them out by moving to the baseline
 		.remove();
 		
-	if (filteredData.length) 
-		showEdition(filteredData[filteredData.length - 1]);
 }
 
 // Event listener for the select box
@@ -209,13 +207,17 @@ d3.select("#y-axis-select").on("change", function() {
 	updateVisualization(data);
 });
 
+
+if (filteredData.length) showEdition(filteredData[filteredData.length - 1]);
+}
+
 // Show details for a specific FIFA World Cup
 function showEdition(d){
-
-
 	
+	if (!d) return; 
 
-	document.getElementById("detail-title").textContent = d.YEAR.getFullYear() + " World Cup " + d.LOCATION;;
+    document.getElementById("detail-title").textContent =
+        `${d.YEAR.getFullYear()} World Cup ${d.LOCATION}`;
 	
 	document.getElementById("detail-winner").textContent = d.WINNER;
 	document.getElementById("detail-goals").textContent = d.GOALS;
