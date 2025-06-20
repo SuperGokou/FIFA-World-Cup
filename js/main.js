@@ -31,13 +31,16 @@ function loadData() {
 	d3.csv("data/fifa-world-cup.csv", row => {
     const toNumber = str => +str.replace(/,/g, "");   // "2,540" → 2540
 	
-		row.EDITION = +row.EDITION;
-		row.YEAR = parseDate(row.YEAR);
-		row.TEAMS = +row.TEAMS;
-		row.MATCHES = +row.MATCHES;
-		row.GOALS = +row.GOALS;
-		row.AVERAGE_GOALS = +row.AVERAGE_GOALS;
-		row.AVERAGE_ATTENDANCE = +row.AVERAGE_ATTENDANCE;
+		row.EDITION            = row.EDITION || NaN;
+		row.YEAR               = parseDate(row.YEAR);     // Date object
+		row.TEAMS              = row.TEAMS;
+		row.MATCHES            = row.MATCHES;
+		row.GOALS              = toNumber(row.GOALS);
+	    row.AVERAGE_GOALS      = row.AVERAGE_GOALS;
+  	    row.AVERAGE_ATTENDANCE = toNumber(row.AVERAGE_ATTENDANCE);
+		
+		
+		
 		return row
 		
 	}).then(csv => {
@@ -197,6 +200,9 @@ function updateVisualization(filteredData) {
 		.duration(1000)
 		.attr("cy", 0) // transition them out by moving to the baseline
 		.remove();
+		
+	if (filteredData.length) 
+		showEdition(filteredData[filteredData.length - 1]);
 }
 
 // Event listener for the select box
@@ -206,14 +212,17 @@ d3.select("#y-axis-select").on("change", function() {
 
 // Show details for a specific FIFA World Cup
 function showEdition(d){
-	console.log("showEdition called with:", d);   // DELETE after testing
 
-	document.getElementById("detail-title").textContent = d.YEAR + " World Cup " + d.CITY;
+	const editionTitle = `${d.YEAR.getFullYear()} World Cup ${d.LOCATION}`;
+	
+	document.getElementById("detail-title").textContent = d.YEAR.getFullYear() + " World Cup " + d.LOCATION;
+
+	document.getElementById("detail-title").textContent = editionTitle;
 	document.getElementById("detail-winner").textContent = d.WINNER;
 	document.getElementById("detail-goals").textContent = d.GOALS;
-	
 	document.getElementById("detail-average-goals").textContent = d.AVERAGE_GOALS;
 	document.getElementById("detail-matches").textContent = d.MATCHES;
 	document.getElementById("detail-teams").textContent = d.TEAMS;
 	document.getElementById("detail-average-attendance").textContent = d.AVERAGE_ATTENDANCE;
+}
 }
