@@ -33,9 +33,6 @@ An interactive web dashboard that visualizes historical statistics of the FIFA W
 2. Open `index.html` in your web browser.
 3. Use the dropdown and slider to explore World Cup data!
 
-## 🖼️ Screenshot
-
-> *(Add a screenshot of your project output here)*
 
 ## 🔧 Future Improvements
 
