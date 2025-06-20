@@ -1,8 +1,3 @@
-
-// margin conventions & svg drawing area - since we only have one chart, it's ok to have these stored as global variables
-// ultimately, we will create dashboards with multiple graphs where having the margin conventions live in the global
-// variable space is no longer a feasible strategy.
-
 /****************************************************
  *  FIFA World Cup – interactive dashboard (HW-7)   *
  *  ------------------------------------------------ *
