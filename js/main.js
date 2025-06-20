@@ -203,7 +203,8 @@ d3.select("#y-axis-select").on("change", function() {
 
 // Show details for a specific FIFA World Cup
 function showEdition(d){
-	
+	console.log("showEdition called with:", d);   // DELETE after testing
+
 	document.getElementById("detail-title").textContent = d.YEAR + " World Cup " + d.CITY;
 
 	document.getElementById("detail-winner").textContent = d.WINNER;
