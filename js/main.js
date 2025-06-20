@@ -29,7 +29,6 @@ let maxYear;
 // Load CSV file
 function loadData() {
 	d3.csv("data/fifa-world-cup.csv", row => {
-    const toNumber = str => +str.replace(/,/g, "");   // "2,540" → 2540
 	
 		row.EDITION            = row.EDITION || NaN;
 		row.YEAR               = parseDate(row.YEAR);     // Date object
