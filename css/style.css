@@ -134,3 +134,16 @@ h3 {
 .noUi-connect {
   background: #92B592;
 }
+
+
+/* ensure the slider always has a track to draw in */
+#slider {
+  width: 100%;           /* fill its flex box */
+  height: 8px;           /* any small positive height works */
+  margin: 0 0.5rem;      /* optional left/right breathing-room */
+}
+
+/* optional: keep the grey label bar from shrinking too far */
+#slider-container {
+  min-width: 200px;      /* stops slider going to 0 px on tiny screens */
+}

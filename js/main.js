@@ -42,7 +42,8 @@ function initChart() {
 /***** Slider *****/
 function initSlider() {
   const years   = data.map(d => +d3.timeFormat("%Y")(d.YEAR));
-  const slider  = document.getElementById("slider");
+  const sliderElement  = document.getElementById("slider");
+  const slider = sliderElement.noUiSlider; 
   const minYear = d3.min(years), maxYear = d3.max(years);
 
   noUiSlider.create(slider, {
@@ -57,6 +58,13 @@ function initSlider() {
   });
 
   slider.noUiSlider.on("set", updateVis);
+  
+  // Force a redraw when the window is resized:
+	window.addEventListener("resize", () => {
+	  // no built-in 'refresh', so just set the same value(s) again
+	  slider.set(slider.get());
+	});
+
 }
 
 /***** Main redraw *****/
@@ -107,6 +115,7 @@ function updateVis() {
   // 7. auto-populate with last point
   if (filtered.length) populatePanel(filtered.at(-1));
 }
+
 
 /***** Detail card *****/
 function populatePanel(d){
