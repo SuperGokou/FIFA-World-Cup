@@ -199,6 +199,8 @@ function updateVisualization(filteredData) {
 // Event listener for the select box
 d3.select("#y-axis-select").on("change", function() {
 	updateVisualization(data);
+	showEdition(data[0]); // Show the first edition's details by default
+
 });
 
 // Show details for a specific FIFA World Cup
