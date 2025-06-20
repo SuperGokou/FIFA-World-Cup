@@ -29,6 +29,8 @@ let maxYear;
 // Load CSV file
 function loadData() {
 	d3.csv("data/fifa-world-cup.csv", row => {
+    const toNumber = str => +str.replace(/,/g, "");   // "2,540" → 2540
+	
 		row.EDITION = +row.EDITION;
 		row.YEAR = parseDate(row.YEAR);
 		row.TEAMS = +row.TEAMS;
@@ -37,6 +39,7 @@ function loadData() {
 		row.AVERAGE_GOALS = +row.AVERAGE_GOALS;
 		row.AVERAGE_ATTENDANCE = +row.AVERAGE_ATTENDANCE;
 		return row
+		
 	}).then(csv => {
 		// Store csv data in global variable
 		data = csv;
@@ -206,7 +209,6 @@ function showEdition(d){
 	console.log("showEdition called with:", d);   // DELETE after testing
 
 	document.getElementById("detail-title").textContent = d.YEAR + " World Cup " + d.CITY;
-
 	document.getElementById("detail-winner").textContent = d.WINNER;
 	document.getElementById("detail-goals").textContent = d.GOALS;
 	
