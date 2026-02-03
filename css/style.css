@@ -1,149 +1,407 @@
+/* ========================================
+   FIFA World Cup Dashboard - Blue Theme
+   ======================================== */
+
+:root {
+    --primary: #1e40af;
+    --primary-light: #3b82f6;
+    --primary-dark: #1e3a8a;
+    --secondary: #64748b;
+    --accent: #0ea5e9;
+    --background: #f1f5f9;
+    --surface: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --shadow: rgba(15, 23, 42, 0.08);
+    --shadow-hover: rgba(15, 23, 42, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
 
 body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f7f7f7;
-}
-
-h1 {
-  font-weight: 100;
-  margin-top: 50px;
-  color: #4B6D4A;
-}
-
-h1 sup {
-  font-size: 11px;
-  top: -18px;
-  font-weight: 400;
-  color: #5b835a;
-}
-
-h2 {
-  font-weight: 300;
-  font-size: 18px;
-  color: #91988B;
-  margin-bottom: 40px;
-}
-
-h3 {
-  font-size: 18px;
-  margin-bottom: 24px;
-  color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
 }
 
 
-/****************/
-/*  USER INPUT  */
-/****************/
+/* ========================================
+   Layout
+   ======================================== */
 
-
-/***************/
-/*   DETAILS   */
-/***************/
-
-#world-cup-edition {
-  display: none;
-  background-color: #F5EFEF;
-  padding: 20px;
-  border: thin solid #4B6D4A; border-radius: 5px
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
 
-/****************/
-/*  LINE CHART  */
-/****************/
+/* ========================================
+   Header
+   ======================================== */
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-.axis text {
-  font-size: 11px;
+.dashboard-header {
+    padding: 32px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
 }
 
-.line {
-  fill: none;
-  stroke: #86AC86;
-  stroke-width: 3px;
+.header-content h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
 }
 
-.tooltip-circle {
-  fill: #5C865B;
-  cursor: pointer;
+.header-content h1 sup {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--secondary);
+    vertical-align: super;
+    margin-left: 2px;
 }
 
-.tooltip-title {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-
-.d3-tip {
-  line-height: 1;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
-  z-index: 100;
-}
-
-/* Creates a small triangle extender for the tooltip */
-.d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
-}
-
-/* Style northward tooltips differently */
-.d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
+.header-content .subtitle {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin: 0;
 }
 
 
-/****************/
-/*    SLIDER    */
-/****************/
+/* ========================================
+   Cards
+   ======================================== */
 
-#time-period-slider {
-  width: 200px;
-  display: inline-block;
-  margin: 0 15px;
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px var(--shadow);
+    transition: box-shadow 0.2s ease;
 }
 
-.range-slider-value {
-  background-color: #EFE9E9;
-  color: #888;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  padding: 2px 10px;
-  font-size: 14px;
-  display: inline-block;
-  vertical-align: top;
+.card:hover {
+    box-shadow: 0 4px 12px var(--shadow-hover);
+}
+
+.chart-card .card-body {
+    padding: 24px;
+}
+
+
+/* ========================================
+   Controls
+   ======================================== */
+
+.controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+}
+
+.form-select {
+    min-width: 180px;
+    padding: 10px 36px 10px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-select:hover {
+    border-color: var(--primary-light);
+}
+
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+
+.slider-group {
+    flex: 1;
+    min-width: 250px;
+}
+
+
+/* ========================================
+   Slider
+   ======================================== */
+
+#slider-container {
+    width: 100%;
+}
+
+#slider {
+    height: 6px;
+    border: none;
+    background: var(--border);
+    border-radius: 3px;
+    box-shadow: none;
 }
 
 .noUi-connect {
-  background: #92B592;
+    background: linear-gradient(90deg, var(--primary-light), var(--primary));
+    border-radius: 3px;
+}
+
+.noUi-horizontal .noUi-handle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--primary);
+    box-shadow: 0 2px 6px var(--shadow);
+    cursor: grab;
+    top: -8px;
+    right: -10px;
+}
+
+.noUi-horizontal .noUi-handle:before,
+.noUi-horizontal .noUi-handle:after {
+    display: none;
+}
+
+.noUi-horizontal .noUi-handle:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.noUi-horizontal .noUi-handle:active {
+    cursor: grabbing;
+}
+
+.noUi-tooltip {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.slider-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    background: rgba(59, 130, 246, 0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
 }
 
 
-/* ensure the slider always has a track to draw in */
-#slider {
-  width: 100%;           /* fill its flex box */
-  height: 8px;           /* any small positive height works */
-  margin: 0 0.5rem;      /* optional left/right breathing-room */
+/* ========================================
+   Chart
+   ======================================== */
+
+#chart-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-/* optional: keep the grey label bar from shrinking too far */
-#slider-container {
-  min-width: 200px;      /* stops slider going to 0 px on tiny screens */
+#chart-area svg {
+    overflow: visible;
+}
+
+.x-axis path,
+.y-axis path,
+.x-axis line,
+.y-axis line {
+    stroke: var(--border);
+}
+
+.x-axis text,
+.y-axis text {
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--text-secondary);
+}
+
+.line-path {
+    stroke: var(--primary-light);
+    stroke-width: 2.5px;
+    fill: none;
+}
+
+#chart-area circle {
+    cursor: pointer;
+    transition: r 0.15s ease;
+}
+
+#chart-area circle:hover {
+    r: 8;
+}
+
+
+/* ========================================
+   Details Panel
+   ======================================== */
+
+.details-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.details-card .card-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 20px 24px;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+}
+
+.details-card .card-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.details-card .card-body {
+    padding: 0;
+    flex: 1;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.15s ease;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row:hover {
+    background-color: rgba(59, 130, 246, 0.04);
+}
+
+.detail-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.detail-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.winner-value {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+
+/* ========================================
+   Footer
+   ======================================== */
+
+.dashboard-footer {
+    padding: 24px 0;
+    margin-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+
+.dashboard-footer p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 991px) {
+    .dashboard-container {
+        padding: 0 16px;
+    }
+
+    .dashboard-header {
+        padding: 24px 0 16px;
+    }
+
+    .header-content h1 {
+        font-size: 26px;
+    }
+
+    .controls-row {
+        gap: 16px;
+    }
+
+    .chart-card .card-body {
+        padding: 16px;
+    }
+
+    .details-card {
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-content h1 {
+        font-size: 22px;
+    }
+
+    .form-select {
+        min-width: 100%;
+    }
+
+    .slider-group {
+        min-width: 100%;
+    }
+
+    .control-group {
+        width: 100%;
+    }
+
+    .detail-row {
+        padding: 14px 16px;
+    }
 }

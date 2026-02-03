@@ -1,89 +1,108 @@
 /****************************************************
- *  FIFA World Cup – interactive dashboard (HW-7)   *
+ *  FIFA World Cup - Interactive Dashboard           *
  *  ------------------------------------------------ *
- *  – Line chart with selectable metric             *
- *  – Year-range slider (noUiSlider)                *
- *  – Detail panel populated automatically & on click*
+ *  - Line chart with selectable metric              *
+ *  - Year-range slider (noUiSlider)                 *
+ *  - Detail panel populated on click                *
  ****************************************************/
 
-/* ---------- 1. SVG & scales ---------- */
-const margin = { top: 40, right: 40, bottom: 60, left: 60 },
-      width  = 600 - margin.left - margin.right,
-      height = 500 - margin.top  - margin.bottom;
+/* ---------- Constants ---------- */
+const CHART_WIDTH = 600;
+const CHART_HEIGHT = 500;
+const MARGIN = { top: 40, right: 40, bottom: 60, left: 60 };
+const TRANSITION_DURATION = 600;
+const COLORS = {
+  line: "#3b82f6",
+  circle: "#3b82f6",
+  circleSelected: "#1e40af",
+  circleStroke: "#1e3a8a"
+};
+
+/* ---------- SVG & Scales ---------- */
+const width = CHART_WIDTH - MARGIN.left - MARGIN.right;
+const height = CHART_HEIGHT - MARGIN.top - MARGIN.bottom;
 
 const svg = d3.select("#chart-area")
   .append("svg")
-  .attr("width",  width  + margin.left + margin.right)
-  .attr("height", height + margin.top  + margin.bottom)
+  .attr("width", CHART_WIDTH)
+  .attr("height", CHART_HEIGHT)
   .append("g")
-  .attr("transform", `translate(${margin.left},${margin.top})`);
+  .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
-const xScale  = d3.scaleTime().range([0, width]);
-const yScale  = d3.scaleLinear().range([height, 0]);
+const xScale = d3.scaleTime().range([0, width]);
+const yScale = d3.scaleLinear().range([height, 0]);
 
-const xAxisG  = svg.append("g").attr("class", "x-axis")
-                   .attr("transform", `translate(0,${height})`);
-const yAxisG  = svg.append("g").attr("class", "y-axis");
+const xAxisG = svg.append("g").attr("class", "x-axis")
+  .attr("transform", `translate(0,${height})`);
+const yAxisG = svg.append("g").attr("class", "y-axis");
 
 const lineGen = d3.line()
   .x(d => xScale(d.YEAR))
   .y(d => yScale(d.value));
 
 svg.append("path").attr("class", "line-path")
-   .attr("fill", "none")
-   .attr("stroke", "#86ac86")
-   .attr("stroke-width", 2);
+  .attr("fill", "none")
+  .attr("stroke", COLORS.line)
+  .attr("stroke-width", 2);
 
-/* ---------- 2. Global state ---------- */
-let data        = [];
-let filtered    = [];
+/* ---------- Global State ---------- */
+let data = [];
+let filtered = [];
 let selectedCir = null;
 
-/* ---------- 3. Load & parse CSV ---------- */
+/* ---------- Load & Parse CSV ---------- */
 d3.csv("data/fifa-world-cup.csv", row => {
-  const num = s => +s.replace(/,/g, "");      // remove thousands-commas
+  const parseNum = s => +s.replace(/,/g, "");
   return {
-    YEAR:               d3.timeParse("%Y")(row.YEAR),
-    LOCATION:           row.LOCATION,
-    WINNER:             row.WINNER,
-    TEAMS:              +row.TEAMS,
-    MATCHES:            +row.MATCHES,
-    GOALS:              num(row.GOALS),
-    AVERAGE_GOALS:      +row.AVERAGE_GOALS,
-    AVERAGE_ATTENDANCE: num(row.AVERAGE_ATTENDANCE)
+    YEAR: d3.timeParse("%Y")(row.YEAR),
+    LOCATION: row.LOCATION,
+    WINNER: row.WINNER,
+    TEAMS: +row.TEAMS,
+    MATCHES: +row.MATCHES,
+    GOALS: parseNum(row.GOALS),
+    AVERAGE_GOALS: +row.AVERAGE_GOALS,
+    AVERAGE_ATTENDANCE: parseNum(row.AVERAGE_ATTENDANCE)
   };
 }).then(csv => {
   data = csv.sort((a, b) => d3.ascending(a.YEAR, b.YEAR));
   createSlider();
-  updateVis();              // initial draw
+  updateVis();
+}).catch(err => {
+  console.error("Failed to load data:", err);
+  document.getElementById("chart-area").innerHTML =
+    '<p class="text-danger p-3">Failed to load World Cup data.</p>';
 });
 
-/* ---------- 4. Slider ---------- */
+/* ---------- Slider ---------- */
 function createSlider() {
   const years = data.map(d => +d3.timeFormat("%Y")(d.YEAR));
+  const minYear = d3.min(years);
+  const maxYear = d3.max(years);
   const slider = document.getElementById("slider");
+
   noUiSlider.create(slider, {
-    start: [d3.min(years), d3.max(years)],
+    start: [minYear, maxYear],
     connect: true,
-    range: { min: d3.min(years), max: d3.max(years) },
+    range: { min: minYear, max: maxYear },
     step: 1,
     tooltips: true,
     format: { to: v => Math.round(v), from: v => +v }
   });
+
   slider.noUiSlider.on("update", (_, __, values) => {
-    document.getElementById("slider-label-left").textContent  = values[0];
+    document.getElementById("slider-label-left").textContent = values[0];
     document.getElementById("slider-label-right").textContent = values[1];
   });
+
   slider.noUiSlider.on("set", (_, __, values) => updateVis(+values[0], +values[1]));
 }
 
-/* ---------- 5. Dropdown listener ---------- */
+/* ---------- Dropdown Listener ---------- */
 d3.select("#y-axis-select").on("change", () => updateVis());
 
-/* ---------- 6. Main update function ---------- */
+/* ---------- Main Update Function ---------- */
 function updateVis(minYear, maxYear) {
-
-  // 1 — filter by slider range (if given)
+  // Filter by slider range
   if (minYear && maxYear) {
     filtered = data.filter(d => {
       const y = +d3.timeFormat("%Y")(d.YEAR);
@@ -93,65 +112,66 @@ function updateVis(minYear, maxYear) {
     filtered = data;
   }
 
-  // 2 — metric from dropdown
+  // Get metric from dropdown
   const metric = d3.select("#y-axis-select").property("value");
   const metricData = filtered.map(d => ({ ...d, value: d[metric] }));
 
-  // 3 — update scales & axes
+  // Update scales & axes
   xScale.domain(d3.extent(metricData, d => d.YEAR));
   yScale.domain([0, d3.max(metricData, d => d.value)]).nice();
 
-  xAxisG.transition().duration(600)
-        .call(d3.axisBottom(xScale).ticks(d3.timeYear.every(8)).tickFormat(d3.timeFormat("%Y")));
-  yAxisG.transition().duration(600).call(d3.axisLeft(yScale));
+  xAxisG.transition().duration(TRANSITION_DURATION)
+    .call(d3.axisBottom(xScale).ticks(d3.timeYear.every(8)).tickFormat(d3.timeFormat("%Y")));
+  yAxisG.transition().duration(TRANSITION_DURATION)
+    .call(d3.axisLeft(yScale));
 
-  // 4 — update line
+  // Update line
   svg.select(".line-path")
-     .datum(metricData)
-     .transition().duration(600)
-     .attr("d", lineGen);
+    .datum(metricData)
+    .transition().duration(TRANSITION_DURATION)
+    .attr("d", lineGen);
 
-  // 5 — update circles
+  // Update circles
   const circles = svg.selectAll("circle").data(metricData, d => d.YEAR);
 
   circles.enter().append("circle")
-      .attr("r", 6)
-      .attr("fill", "#5c865b")
-      .attr("stroke", "black")
-      .on("click", (_, d) => {
-        highlightCircle(d.YEAR);
-        populatePanel(d);
-      })
+    .attr("r", 6)
+    .attr("fill", COLORS.circle)
+    .attr("stroke", COLORS.circleStroke)
+    .on("click", (_, d) => {
+      highlightCircle(d.YEAR);
+      populatePanel(d);
+    })
     .merge(circles)
-      .transition().duration(600)
-      .attr("cx", d => xScale(d.YEAR))
-      .attr("cy", d => yScale(d.value));
+    .transition().duration(TRANSITION_DURATION)
+    .attr("cx", d => xScale(d.YEAR))
+    .attr("cy", d => yScale(d.value));
 
   circles.exit().remove();
 
-  // 6 — auto-populate panel with the latest entry in view
+  // Auto-populate panel with latest entry
   if (metricData.length) {
-    highlightCircle(metricData[metricData.length - 1].YEAR);
-    populatePanel(metricData[metricData.length - 1]);
+    const latest = metricData[metricData.length - 1];
+    highlightCircle(latest.YEAR);
+    populatePanel(latest);
   }
 }
 
-/* ---------- 7. Helpers ---------- */
+/* ---------- Helpers ---------- */
 function highlightCircle(yearDate) {
-  if (selectedCir) selectedCir.attr("fill", "#5c865b");
+  if (selectedCir) selectedCir.attr("fill", COLORS.circle);
   selectedCir = svg.selectAll("circle")
-                   .filter(d => d.YEAR === yearDate)
-                   .attr("fill", "black");
+    .filter(d => d.YEAR === yearDate)
+    .attr("fill", COLORS.circleSelected);
 }
 
 function populatePanel(d) {
   document.getElementById("detail-title").textContent =
-      `${d.YEAR.getFullYear()} World Cup ${d.LOCATION}`;
-
-  document.getElementById("detail-winner").textContent            = d.WINNER;
-  document.getElementById("detail-goals").textContent             = d.GOALS;
-  document.getElementById("detail-average-goals").textContent     = d.AVERAGE_GOALS;
-  document.getElementById("detail-matches").textContent           = d.MATCHES;
-  document.getElementById("detail-teams").textContent             = d.TEAMS;
-  document.getElementById("detail-average-attendance").textContent= d.AVERAGE_ATTENDANCE.toLocaleString();
+    `${d.YEAR.getFullYear()} World Cup ${d.LOCATION}`;
+  document.getElementById("detail-winner").textContent = d.WINNER;
+  document.getElementById("detail-goals").textContent = d.GOALS;
+  document.getElementById("detail-average-goals").textContent = d.AVERAGE_GOALS;
+  document.getElementById("detail-matches").textContent = d.MATCHES;
+  document.getElementById("detail-teams").textContent = d.TEAMS;
+  document.getElementById("detail-average-attendance").textContent = d.AVERAGE_ATTENDANCE.toLocaleString();
 }
