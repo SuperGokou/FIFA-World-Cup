@@ -2,8 +2,7 @@
 
 An interactive data visualization dashboard exploring 84 years of FIFA World Cup history (1930-2014). Built with D3.js for dynamic charting and Bootstrap for responsive layout.
 
-![Dashboard Preview](screenshot.png)
-<!-- Replace screenshot.png with an actual screenshot of your dashboard -->
+![Dashboard Preview](img/screenshot.png)
 
 ## Table of Contents
 
